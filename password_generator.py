@@ -126,9 +126,7 @@ def main():
         print("\nВыберите действие:")
         print("1. Сгенерировать пароль с текущими настройками")
         print("2. Изменить настройки")
-        print("3. Сохранить настройки")
-        print("4. Загрузить настройки")
-        print("5. Сбросить настройки")
+        print("3. Сбросить настройки")
         print("0. Выход")
 
         choice = input("Введите номер действия: ")
@@ -177,13 +175,6 @@ def main():
             except Exception as e:
                 print("Произошла ошибка при изменении настроек:", e)
         elif choice == '3':
-             settings_obj.save_to_file()
-             print("Настройки сохранены в файл.")
-        elif choice == '4':
-            settings_obj.load_from_file()
-            print("Настройки загружены из файла.")
-            print(settings_obj)
-        elif choice == '5':
             settings_obj.reset_to_defaults()
             print("Настройки сброшены к значениям по умолчанию.")
             print(settings_obj)
