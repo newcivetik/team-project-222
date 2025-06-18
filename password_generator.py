@@ -1,4 +1,4 @@
-import secrets
+import random
 import string
 
 def generate_password(length: int, use_letters: bool, use_digits: bool, use_symbols: bool, algorithm: str = "default") -> str:
@@ -33,22 +33,22 @@ def generate_password(length: int, use_letters: bool, use_digits: bool, use_symb
         raise ValueError("Необходимо выбрать хотя бы один набор символов.")
 
     if algorithm == "default":
-        password = ''.join(secrets.choice(characters) for _ in range(length))
+        password = ''.join(random.choice(characters) for _ in range(length))
     elif algorithm == "strict":
         # Гарантирует наличие хотя бы одного символа из каждого выбранного набора
         password = ""
         if use_letters:
-            password += secrets.choice(string.ascii_letters)
+            password += random.choice(string.ascii_letters)
         if use_digits:
-            password += secrets.choice(string.digits)
+            password += random.choice(string.digits)
         if use_symbols:
-            password += secrets.choice(string.punctuation)
+            password += random.choice(string.punctuation)
 
         remaining_length = length - len(password)
         if remaining_length > 0:
-            password += ''.join(secrets.choice(characters) for _ in range(remaining_length))
+            password += ''.join(random.choice(characters) for _ in range(remaining_length))
         password_list = list(password)
-        secrets.shuffle(password_list)  # Перемешиваем, чтобы символы были в случайном порядке
+        random.shuffle(password_list)  # Перемешиваем, чтобы символы были в случайном порядке
         password = ''.join(password_list)
 
     else:
