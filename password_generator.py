@@ -4,19 +4,6 @@ import string
 def generate_password(length: int, use_letters: bool, use_digits: bool, use_symbols: bool, algorithm: str = "default") -> str:
     """
     Генерирует случайный пароль заданной длины с использованием указанных наборов символов.
-
-    Args:
-        length: Длина пароля (минимум 1).
-        use_letters: Использовать ли буквы (a-z, A-Z).
-        use_digits: Использовать ли цифры (0-9).
-        use_symbols: Использовать ли специальные символы (!@#$%^&*()).
-        algorithm: Алгоритм генерации ("default" или "strict").
-
-    Returns:
-        Сгенерированный пароль.
-
-    Raises:
-        ValueError: Если длина пароля меньше 1 или недопустимый алгоритм.
     """
     if length < 1:
         raise ValueError("Длина пароля должна быть не менее 1.")
@@ -35,22 +22,27 @@ def generate_password(length: int, use_letters: bool, use_digits: bool, use_symb
     if algorithm == "default":
         password = ''.join(random.choice(characters) for _ in range(length))
     elif algorithm == "strict":
-        # Гарантирует наличие хотя бы одного символа из каждого выбранного набора
-        password = ""
+        chosen_sets = []
         if use_letters:
-            password += random.choice(string.ascii_letters)
+            chosen_sets.append(string.ascii_letters)
         if use_digits:
-            password += random.choice(string.digits)
+            chosen_sets.append(string.digits)
         if use_symbols:
-            password += random.choice(string.punctuation)
+            chosen_sets.append(string.punctuation)
 
-        remaining_length = length - len(password)
-        if remaining_length > 0:
-            password += ''.join(random.choice(characters) for _ in range(remaining_length))
-        password_list = list(password)
-        random.shuffle(password_list)  # Перемешиваем, чтобы символы были в случайном порядке
+        num_chosen_sets = len(chosen_sets)
+        if length < num_chosen_sets:
+            raise ValueError("Длина пароля должна быть не меньше количества выбранных наборов символов при использовании strict алгоритма.")
+
+        password_list = [random.choice(s) for s in chosen_sets]
+        remaining_length = length - num_chosen_sets
+        characters = "".join(chosen_sets)
+
+        for _ in range(remaining_length):
+            password_list.append(random.choice(characters))
+
+        random.shuffle(password_list)
         password = ''.join(password_list)
-
     else:
         raise ValueError("Недопустимый алгоритм генерации пароля.")
 
